@@ -7,7 +7,7 @@
             "api": {
                 "memory": 256,
                 "timeout": 30,
-                "reservedConcurrency": 100,
+                "reservedConcurrency": 0,
                 "provisionedConcurrency": 0,
                 "autoScaling": {
                     "enabled": true,
@@ -45,7 +45,7 @@
             "api": {
                 "memory": 512,
                 "timeout": 30,
-                "reservedConcurrency": 200,
+                "reservedConcurrency": 0,
                 "provisionedConcurrency": 2,
                 "autoScaling": {
                     "enabled": true,

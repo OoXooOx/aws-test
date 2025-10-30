@@ -72,7 +72,7 @@ export class StandardLambdaFunction extends Construct {
                     '/opt/nodejs/*',
                 ],
             },
-            depsLockFilePath: path.join(path.dirname(props.entry), 'package-lock.json'),
+            depsLockFilePath: './package-lock.json',
         });
 
         // Setup alias with provisioned concurrency and auto-scaling

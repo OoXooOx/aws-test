@@ -104,7 +104,35 @@ GITHUB_TOKEN_SECRET_NAME=github/personal-access-token
 
 **Important:** The `.env` file is already in `.gitignore` and will NOT be committed to your repository. This keeps your personal information private.
 
-### Step 6: Deploy the Stack
+### Step 6: Bootstrap AWS CDK (One-Time Setup)
+
+**IMPORTANT:** Before deploying, you must bootstrap CDK in your AWS account. This is a **one-time setup** per account/region.
+
+**What is bootstrap?**
+- Creates S3 bucket for deployment assets
+- Creates IAM roles for CDK deployments
+- Sets up required AWS resources for CDK
+
+**Run bootstrap command:**
+```powershell
+npx cdk bootstrap aws://YOUR_ACCOUNT_ID/eu-central-1 --context environment=development --context awsRegion=eu-central-1 --context awsAccount=YOUR_ACCOUNT_ID
+```
+
+**Example:**
+```powershell
+npx cdk bootstrap aws://123456789012/eu-central-1 --context environment=development --context awsRegion=eu-central-1 --context awsAccount=123456789012
+```
+
+**Expected output:**
+```
+✅ Environment aws://123456789012/eu-central-1 bootstrapped.
+```
+
+**This takes 2-3 minutes and creates the `CDKToolkit` CloudFormation stack.**
+
+**Note:** You only need to do this ONCE per AWS account and region combination. If you later deploy to another region (like us-east-1), you'll need to bootstrap that region too.
+
+### Step 7: Deploy the Stack
 
 ```powershell
 # Deploy infrastructure (includes Amplify)
@@ -112,12 +140,15 @@ GITHUB_TOKEN_SECRET_NAME=github/personal-access-token
 ```
 
 This will:
-1. Create the Amplify app
-2. Connect it to your GitHub repository
-3. Trigger the first deployment automatically
-4. Output the Amplify URL
+1. Load environment variables from .env
+2. Validate all required variables are present
+3. Install dependencies and build TypeScript
+4. Create the Amplify app
+5. Connect it to your GitHub repository
+6. Trigger the first deployment automatically
+7. Output the Amplify URL
 
-### Step 7: Access Your Deployed UI
+### Step 8: Access Your Deployed UI
 
 After deployment completes, you'll see outputs:
 
@@ -209,7 +240,80 @@ Amplify build logs are also in CloudWatch:
 /aws/amplify/aws-test-dev-ui
 ```
 
-## Troubleshooting
+## Common Deployment Issues
+
+### Issue 1: "SSM parameter not found. Has the environment been bootstrapped?"
+
+**Error:**
+```
+AwsTest-development: SSM parameter /cdk-bootstrap/hnb659fds/version not found. 
+Has the environment been bootstrapped? Please run 'cdk bootstrap'
+```
+
+**Cause:** AWS CDK not bootstrapped in your account/region.
+
+**Solution:**
+Run bootstrap command (one-time setup):
+```powershell
+npx cdk bootstrap aws://YOUR_ACCOUNT_ID/eu-central-1 --context environment=development --context awsRegion=eu-central-1 --context awsAccount=YOUR_ACCOUNT_ID
+```
+
+### Issue 2: "ReservedConcurrentExecutions decreases account's UnreservedConcurrentExecution below minimum"
+
+**Error:**
+```
+Specified ReservedConcurrentExecutions for function decreases account's 
+UnreservedConcurrentExecution below its minimum value of [10].
+```
+
+**Cause:** New AWS accounts often start with **only 10 concurrent execution limit** (not the standard 1,000).
+
+**Check your limit:**
+1. AWS Console → Service Quotas
+2. Search "Lambda"
+3. Find "Concurrent executions"
+4. Check "Applied account-level quota value"
+
+**Solution:**
+
+**Option A - Set to 0 (Recommended for testing):**
+
+Edit `config/environments.json`:
+```json
+"reservedConcurrency": 0
+```
+
+This uses unreserved pool and works with any limit.
+
+**Option B - Request limit increase:**
+1. Go to Service Quotas → AWS Lambda → Concurrent executions
+2. Click "Request increase at account level"
+3. Request new quota: 1,000
+4. Wait for approval (usually 24-48 hours)
+
+### Issue 3: "Missing required environment variables"
+
+**Error:**
+```
+Error: Missing required environment variables for Amplify GitHub integration.
+Please set GITHUB_OWNER and GITHUB_REPOSITORY in your .env file.
+```
+
+**Cause:** `.env` file not created or missing required variables.
+
+**Solution:**
+1. Copy `env.example` to `.env`
+2. Fill in all required values:
+```bash
+GITHUB_OWNER=your-username
+GITHUB_REPOSITORY=aws-test
+AWS_ACCESS_KEY_ID=your-key
+AWS_SECRET_ACCESS_KEY=your-secret
+```
+3. Make sure NO variables are empty
+4. Redeploy
+
+## Amplify Troubleshooting
 
 ### Build Fails with "Access Denied"
 

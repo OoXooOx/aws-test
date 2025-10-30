@@ -75,17 +75,29 @@ Quick steps:
 3. Store token in AWS Secrets Manager
 4. Update `config/environments.json` with your GitHub username/repo
 
+### Bootstrap CDK (One-Time Setup)
+
+**IMPORTANT:** Before first deployment, bootstrap AWS CDK in your account:
+
+```powershell
+npx cdk bootstrap aws://YOUR_ACCOUNT_ID/eu-central-1 --context environment=development --context awsRegion=eu-central-1 --context awsAccount=YOUR_ACCOUNT_ID
+```
+
+This creates required AWS resources for CDK deployments (S3 bucket, IAM roles, etc.). Only needed ONCE per account/region.
+
 ### Deployment
 
+**Using PowerShell script (recommended):**
+```powershell
+.\deploy.ps1 development eu-central-1 YOUR_ACCOUNT_ID
+```
+
+**Or using CDK directly:**
 ```bash
-# Replace YOUR_ACCOUNT_ID with your actual AWS account ID
 npx cdk deploy \
   --context environment=development \
   --context awsRegion=eu-central-1 \
   --context awsAccount=YOUR_ACCOUNT_ID
-
-# Or edit package.json scripts and use:
-npm run deploy
 ```
 
 ## Usage
@@ -292,6 +304,29 @@ This project uses professional production-ready patterns:
 - No Lambda layers (all code in one function)
 - No secrets management (no API keys needed)
 - No Blue/Green deployment (development only)
+
+## Troubleshooting
+
+Having deployment issues? Check these common problems:
+
+**1. CDK Not Bootstrapped:**
+- Error: "SSM parameter /cdk-bootstrap/... not found"
+- Solution: Run `npx cdk bootstrap` (see docs/TROUBLESHOOTING.md)
+
+**2. Reserved Concurrency Limit:**
+- Error: "decreases UnreservedConcurrentExecution below minimum"
+- Solution: Set `reservedConcurrency: 0` in config/environments.json
+- Cause: New AWS accounts often have only 10 concurrent execution limit
+
+**3. Missing Environment Variables:**
+- Error: "Missing required environment variables"
+- Solution: Create `.env` file from `env.example` and fill all values
+
+**4. GitHub Token Issues:**
+- Error: "Access Denied" or "Repository Not Found"
+- Solution: Check token in AWS Secrets Manager, verify repo name
+
+**See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for detailed solutions.**
 
 ## Next Steps
 
