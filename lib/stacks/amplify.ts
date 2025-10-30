@@ -74,6 +74,16 @@ export class AmplifyStack extends Construct {
                 ENVIRONMENT: naming.lambda.stage,
             },
 
+            // Custom build spec for static UI deployment
+            // NOTE: This only builds the UI, not the backend (Lambda layers use Windows commands)
+            customRules: [
+                {
+                    source: '/<*>',
+                    target: '/index.html',
+                    status: amplify.RedirectStatus.NOT_FOUND_REWRITE,
+                },
+            ],
+
             // Auto-delete on stack destruction
             autoBranchDeletion: true,
         });

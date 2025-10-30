@@ -1,0 +1,18 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Skipping npm install - UI has no build dependencies"
+    build:
+      commands:
+        - echo "# Auto-generated configuration" > ui/config.js
+        - echo "window.CONFIG = { API_ENDPOINT: \"$API_ENDPOINT\", ENVIRONMENT: \"$ENVIRONMENT\" };" >> ui/config.js
+        - echo "UI configuration generated"
+  artifacts:
+    baseDirectory: ui
+    files:
+      - '**/*'
+  cache:
+    paths: []
+
