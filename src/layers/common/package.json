@@ -1,0 +1,20 @@
+{
+    "name": "aws-test-common-layer",
+    "version": "1.0.0",
+    "description": "Common utilities and AWS SDK for Lambda functions",
+    "main": "nodejs/node_modules/index.js",
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.651.1",
+        "@aws-sdk/client-secrets-manager": "^3.651.1",
+        "@aws-sdk/lib-dynamodb": "^3.651.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.7.9",
+        "typescript": "~5.6.3"
+    },
+    "scripts": {
+        "build": "tsc && npm install --omit=dev && if not exist nodejs\\node_modules mkdir nodejs\\node_modules && xcopy /E /I /Y node_modules nodejs\\node_modules",
+        "clean": "if exist nodejs rmdir /S /Q nodejs && if exist dist rmdir /S /Q dist",
+        "clean:nodejs": "if exist nodejs rmdir /S /Q nodejs"
+    }
+}

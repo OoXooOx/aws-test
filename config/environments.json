@@ -1,0 +1,78 @@
+{
+    "development": {
+        "features": {
+            "blueGreenEnabled": false
+        },
+        "lambda": {
+            "api": {
+                "memory": 256,
+                "timeout": 30,
+                "reservedConcurrency": 100,
+                "provisionedConcurrency": 0,
+                "autoScaling": {
+                    "enabled": true,
+                    "minCapacity": 1,
+                    "maxCapacity": 10,
+                    "utilizationTarget": 0.7
+                },
+                "codeDeploy": {
+                    "enabled": false,
+                    "deploymentPreference": "ALL_AT_ONCE",
+                    "alarms": {
+                        "enabled": false,
+                        "errorRateThreshold": 0.05,
+                        "evaluationPeriods": 2
+                    }
+                }
+            }
+        },
+        "dynamodb": {
+            "ttlSeconds": 86400
+        },
+        "apiGateway": {
+            "throttleRateLimit": 100,
+            "throttleBurstLimit": 200
+        },
+        "amplify": {
+            "enablePRPreviews": true
+        }
+    },
+    "production": {
+        "features": {
+            "blueGreenEnabled": true
+        },
+        "lambda": {
+            "api": {
+                "memory": 512,
+                "timeout": 30,
+                "reservedConcurrency": 200,
+                "provisionedConcurrency": 2,
+                "autoScaling": {
+                    "enabled": true,
+                    "minCapacity": 2,
+                    "maxCapacity": 20,
+                    "utilizationTarget": 0.7
+                },
+                "codeDeploy": {
+                    "enabled": true,
+                    "deploymentPreference": "LINEAR_10PERCENT_EVERY_1MINUTE",
+                    "alarms": {
+                        "enabled": true,
+                        "errorRateThreshold": 0.05,
+                        "evaluationPeriods": 2
+                    }
+                }
+            }
+        },
+        "dynamodb": {
+            "ttlSeconds": 604800
+        },
+        "apiGateway": {
+            "throttleRateLimit": 1000,
+            "throttleBurstLimit": 2000
+        },
+        "amplify": {
+            "enablePRPreviews": false
+        }
+    }
+}

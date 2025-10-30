@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "lib": [
+            "es2022"
+        ],
+        "declaration": true,
+        "outDir": "./dist",
+        "rootDir": ".",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "baseUrl": ".",
+        "paths": {
+            "/opt/nodejs": [
+                "src/layers/common/src/index"
+            ],
+            "/opt/nodejs/*": [
+                "src/layers/common/src/*"
+            ]
+        }
+    },
+    "include": [
+        "bin/**/*",
+        "lib/**/*",
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "cdk.out",
+        "dist",
+        "src/layers/*/nodejs",
+        "src/layers/*/dist"
+    ]
+}

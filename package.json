@@ -1,0 +1,33 @@
+{
+    "name": "aws-test",
+    "version": "1.0.0",
+    "description": "Simple AWS test project with API Gateway, Lambda, and DynamoDB",
+    "bin": {
+        "aws-test": "bin/aws-test.js"
+    },
+    "scripts": {
+        "build:layer:common": "cd src/layers/common && npm run build",
+        "build:layers": "npm run build:layer:common",
+        "build": "npm run build:layers && tsc",
+        "clean": "echo Cleaned",
+        "deploy": "cdk deploy --context environment=development --context awsRegion=eu-central-1 --context awsAccount=YOUR_ACCOUNT_ID",
+        "synth": "cdk synth --context environment=development --context awsRegion=eu-central-1 --context awsAccount=YOUR_ACCOUNT_ID"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.131",
+        "@types/node": "^22.7.9",
+        "aws-cdk": "^2.172.0",
+        "esbuild": "^0.24.0",
+        "ts-node": "^10.9.2",
+        "typescript": "~5.6.3"
+    },
+    "dependencies": {
+        "@aws-cdk/aws-amplify-alpha": "2.172.0-alpha.0",
+        "aws-cdk-lib": "2.172.0",
+        "constructs": "^10.0.0",
+        "source-map-support": "^0.5.21"
+    },
+    "engines": {
+        "node": ">=22.0.0"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "aws-test-api-lambda",
+    "version": "1.0.0",
+    "description": "API Lambda function for aws-test project",
+    "main": "index.js",
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.131",
+        "@types/node": "^22.7.9",
+        "typescript": "~5.6.3"
+    }
+}

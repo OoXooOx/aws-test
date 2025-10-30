@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phrase Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Phrase Manager</h1>
+            <p class="subtitle">Simple AWS serverless application</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="counter">0</div>
+                <div class="stat-label">Total Phrases</div>
+            </div>
+        </div>
+
+        <div class="add-phrase-section">
+            <h2>Add New Phrase</h2>
+            <form id="addPhraseForm">
+                <div class="form-group">
+                    <input type="text" id="phraseInput" placeholder="Enter your phrase (max 100 characters)"
+                        maxlength="100" required />
+                    <div class="char-count">
+                        <span id="charCount">0</span> / 100 characters
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Add Phrase</button>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+
+        <div class="phrases-section">
+            <h2>Recent Phrases</h2>
+            <div id="phrasesList" class="phrases-list">
+                <div class="loading">Loading phrases...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Built with AWS Lambda + DynamoDB + API Gateway + S3</p>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
